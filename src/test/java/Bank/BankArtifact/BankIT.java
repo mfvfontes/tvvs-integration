@@ -52,13 +52,59 @@ public class BankIT {
 	@Test	
 	public void testWithdrawAmount() {	
 		// use the functions depositAccount(Client), getClientByName(String) & withdrawClientAccount(Client) from Bank
-		assertTrue(false);
+		
+		Client c1 = new Client("John");
+		Client c2 = new Client("Mary");
+		Client c3 = new Client("Eve");
+		
+		Bank b = new Bank();
+		
+		b.addClient(c1);
+		b.addClient(c2);
+		b.addClient(c3);
+		
+		b.depositAccount(c1, 1500.f);
+		b.depositAccount(c2, 3000.f);
+		b.depositAccount(c3, 4500.f);
+		
+		b.withdrawClientAccount(b.getClientByName("John"), 500.0f);
+		b.withdrawClientAccount(b.getClientByName("Mary"), 250.0f);
+		b.withdrawClientAccount(b.getClientByName("Eve"), 100.0f);
+		
+		assertEquals(b.getClientByName("John").getAccount().getAmount(), 1000.0f, floatTolerance);
+		assertEquals(b.getClientByName("Mary").getAccount().getAmount(), 2750.0f, floatTolerance);
+		assertEquals(b.getClientByName("Eve").getAccount().getAmount(), 4400.0f, floatTolerance);
+		
 	}
 	
 	@Test
 	public void testTransactionBetweenUsers() {
 		// use the functions transfer(Client,Client,float) & getClientByName(String) from Bank
-		assertTrue(false);
+		
+		Client c1 = new Client("John");
+		Client c2 = new Client("Mary");
+		Client c3 = new Client("Eve");
+		
+		Bank b = new Bank();
+		
+		b.addClient(c1);
+		b.addClient(c2);
+		b.addClient(c3);
+		
+		b.depositAccount(c1, 1500.f);
+		b.depositAccount(c2, 3000.f);
+		b.depositAccount(c3, 4500.f);
+		
+		assertEquals(b.transfer(b.getClientByName("John"), b.getClientByName("Mary"), 2000.0f), -1);
+		
+		assertEquals(b.transfer(b.getClientByName("John"), b.getClientByName("Mary"), 200.0f), 0);
+		assertEquals(b.getClientByName("Mary").getAccount().getAmount(), 3200.0f, floatTolerance);
+		assertEquals(b.getClientByName("John").getAccount().getAmount(), 1300.0f, floatTolerance);
+		
+		assertEquals(b.transfer(b.getClientByName("Mary"), b.getClientByName("Eve"), 100.0f), 0);
+		assertEquals(b.getClientByName("Eve").getAccount().getAmount(), 4600.0f, floatTolerance);
+		assertEquals(b.getClientByName("Mary").getAccount().getAmount(), 3100.0f, floatTolerance);
+		
 	}
 
 }
